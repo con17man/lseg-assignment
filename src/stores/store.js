@@ -13,7 +13,11 @@ export const useMainStore = defineStore('store', {
     error: null,
   }),
 
-  getters: {},
+  getters: {
+    // hasDataFetched: state => {
+    //   return state.topStocks.data;
+    // },
+  },
 
   actions: {
     async getData({ mutationKey, url, props, options }) {
