@@ -26,7 +26,7 @@ defineProps({
   }
 
   &--rounded {
-    @apply w-11 h-11 p-2 border-blue;
+    @apply w-12 h-12 p-2 border-blue;
   }
 }
 </style>

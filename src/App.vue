@@ -3,12 +3,12 @@ import { RouterLink, RouterView } from 'vue-router';
 import { useMainStore } from './stores/store';
 import { onMounted } from 'vue';
 
-import LsegButton from './components/LsegButton.vue';
+import LsegChatbot from './components/LsegChatbot.vue';
 
 const store = useMainStore();
 
 onMounted(async () => {
-  await store.fetchTopStocks();
+  // await store.fetchTopStocks();
 });
 
 </script>
@@ -25,10 +25,7 @@ onMounted(async () => {
   <RouterView />
 
   <!-- Chatbot here -->
-  <lseg-button label="Hello World" />
-  <lseg-button class="btn--rounded">
-    <i class="fa-solid fa-plus"></i>
-  </lseg-button>
+  <lseg-chatbot @start-chat="store.fetchTopStocks" />
 </template>
 
 <style scoped lang="scss">
