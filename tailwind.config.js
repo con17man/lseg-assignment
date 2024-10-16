@@ -8,6 +8,11 @@ export default {
           DEFAULT: '#0028F6',
         },
       },
+
+      gridTemplateColumns: {
+        'chat-msg-bot': '40px minmax(auto, 1fr)',
+        'chat-msg-user': 'minmax(auto, 1fr) 40px',
+      },
     },
   },
   plugins: [],

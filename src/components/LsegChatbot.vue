@@ -29,13 +29,15 @@ const toggleConversationView = () => {
   </lseg-button>
 
   <!-- Chat window -->
-  <div v-if="data.chatToggle" class="chat">
-    <lseg-chat-msg>1--</lseg-chat-msg>
+  <div v-if="data.chatToggle" class="chat__wrapper">
+    <!-- for loop to render messages -->
+    <lseg-chat-msg text="Select stock exchange:" :isUser="false"></lseg-chat-msg>
+    <lseg-chat-msg text="LSEG" :isUser="true"></lseg-chat-msg>
   </div>
 </template>
 
 <style scoped lang="scss">
-.chat {
-  @apply absolute bottom-8 right-24 border-2 border-blue rounded-2xl p-2 w-2/3 max-w-[600px] h-[600px];
+.chat__wrapper {
+  @apply absolute bottom-8 right-24 border-2 border-blue rounded-2xl p-2 w-2/3 max-w-[600px] h-[600px] overflow-y-auto overscroll-contain;
 }
 </style>
