@@ -1,9 +1,10 @@
 <script setup>
 import { reactive } from 'vue';
 import LsegButton from './LsegButton.vue';
+import LsegChatMsg from './LsegChatMsg.vue';
 
 const data = reactive({
-  chatToggle: false
+  chatToggle: false,
 });
 
 const emit = defineEmits(['startChat']);
@@ -29,7 +30,7 @@ const toggleConversationView = () => {
 
   <!-- Chat window -->
   <div v-if="data.chatToggle" class="chat">
-    hey
+    <lseg-chat-msg>1--</lseg-chat-msg>
   </div>
 </template>
 
