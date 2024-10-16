@@ -1,7 +1,8 @@
-<template>
-  <div class="about">
-    <h1>About page</h1>
-  </div>
-</template>
+<script setup>
+</script>
 
-<style></style>
+<template>
+  <section class="container mx-auto">
+    this is the about page
+  </section>
+</template>

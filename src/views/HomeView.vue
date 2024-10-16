@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <main>
-    <!-- TODO -- add CTA chatbot here -->
-  </main>
+  <section class="container mx-auto">
+    this is the homepage
+  </section>
 </template>
