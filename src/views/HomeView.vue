@@ -3,6 +3,8 @@
 
 <template>
   <section class="container mx-auto">
-    this is the homepage
+    Hi there! This page is a little bit empty.
+    <br>
+    Please check the chatbot on the bottom right of the page.
   </section>
 </template>
