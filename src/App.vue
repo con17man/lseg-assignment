@@ -3,6 +3,8 @@ import { RouterLink, RouterView } from 'vue-router';
 import { useMainStore } from './stores/store';
 import { onMounted } from 'vue';
 
+import LsegButton from './components/LsegButton.vue';
+
 const store = useMainStore();
 
 onMounted(async () => {
@@ -21,6 +23,12 @@ onMounted(async () => {
   </section>
 
   <RouterView />
+
+  <!-- Chatbot here -->
+  <lseg-button label="Hello World" />
+  <lseg-button class="btn--rounded">
+    <i class="fa-solid fa-plus"></i>
+  </lseg-button>
 </template>
 
 <style scoped lang="scss">
