@@ -7,9 +7,9 @@ const DATA_STORE_OBJ = {
   data: null,
 };
 
-export const useStore = defineStore('store', {
+export const useMainStore = defineStore('store', {
   state: () => ({
-    stocks: { ...DATA_STORE_OBJ },
+    topStocks: { ...DATA_STORE_OBJ },
     error: null,
   }),
 
@@ -49,7 +49,10 @@ export const useStore = defineStore('store', {
     },
 
     async fetchTopStocks() {
-      // TODO -- fetch dummy data
+      return await this.getData({
+        mutationKey: 'topStocks',
+        url: '/data/dummy_data.json',
+      });
     },
   },
 });

@@ -1,5 +1,14 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
+import { useMainStore } from './stores/store';
+import { onMounted } from 'vue';
+
+const store = useMainStore();
+
+onMounted(async () => {
+  await store.fetchTopStocks();
+});
+
 </script>
 
 <template>
@@ -13,6 +22,4 @@ import { RouterLink, RouterView } from 'vue-router';
   <RouterView />
 </template>
 
-<style scoped>
-
-</style>
+<style scoped lang="scss"></style>
