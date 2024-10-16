@@ -1,15 +1,10 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
 import { useMainStore } from './stores/store';
-import { onMounted } from 'vue';
 
 import LsegChatbot from './components/LsegChatbot.vue';
 
 const store = useMainStore();
-
-onMounted(async () => {
-  // await store.fetchTopStocks();
-});
 
 </script>
 
