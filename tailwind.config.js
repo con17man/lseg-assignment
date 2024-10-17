@@ -10,8 +10,8 @@ export default {
       },
 
       gridTemplateColumns: {
-        'chat-msg-bot': '40px minmax(auto, 1fr)',
-        'chat-msg-user': 'minmax(auto, 1fr) 40px',
+        'chat-msg-bot': '40px 1fr',
+        'chat-msg-user': '1fr 40px',
       },
     },
   },

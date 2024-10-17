@@ -35,6 +35,10 @@ const handleOptionSelect = item => {
   });
   disableList.value = true;
 };
+
+const resetFlow = () => {
+  store.$reset;
+};
 </script>
 
 <template>
@@ -59,9 +63,9 @@ const handleOptionSelect = item => {
 
     <!-- TO DO -- flow variations -->
     <ul v-if="!!isEndOfFlow" class="chat__options">
-      <button class="chat__option">Select another stock</button>
-      <button class="chat__option">Select another exchange</button>
-      <button class="chat__option">Start over</button>
+      <button class="chat__action">Select another stock</button>
+      <button class="chat__action">Select another exchange</button>
+      <button class="chat__action" @click.once="resetFlow()">Start over</button>
     </ul>
   </div>
 </template>
@@ -84,9 +88,13 @@ const handleOptionSelect = item => {
 }
 
 .chat__option {
+  grid-template-columns: 1fr 4em;
+}
+
+.chat__option,
+.chat__action {
   display: grid;
   width: 100%;
-  grid-template-columns: 1fr 4em;
   padding: 0.25em;
   margin: 0.5em 0;
   text-align: center;

@@ -117,7 +117,11 @@ watch(
 
 <template>
   <lseg-button
-    class="btn--rounded absolute bottom-8 right-8"
+    :class="[
+      'btn--rounded',
+      'chat__toggle',
+      data.chatToggle ? 'chat__toggle--on' : 'chat__toggle--off',
+    ]"
     @click="toggleConversationView"
   >
     <i v-if="!data.chatToggle" class="fa-solid fa-robot"></i>
@@ -157,8 +161,20 @@ watch(
 </template>
 
 <style scoped lang="scss">
+.chat__toggle {
+  @apply absolute right-4 sm:bottom-8 sm:right-8 z-10;
+
+  &--on {
+    @apply top-4 sm:top-auto;
+  }
+
+  &--off {
+    @apply bottom-8;
+  }
+}
+
 .chat__wrapper {
-  @apply absolute flex flex-col justify-end bottom-8 right-24 border-2 border-blue rounded-2xl w-2/3 max-w-[600px] h-[600px];
+  @apply absolute flex flex-col justify-end bottom-0 sm:bottom-8 right-0 sm:right-24 bg-white border-2 border-blue rounded-2xl w-full sm:w-2/3 sm:max-w-[600px] h-screen sm:h-[600px];
 }
 
 .chat__main {
