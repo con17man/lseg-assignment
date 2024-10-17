@@ -4,18 +4,17 @@ import LsegAvatar from './LsegAvatar.vue';
 const props = defineProps({
   text: {
     type: String,
-    required: true
+    required: true,
   },
   options: {
     type: Array,
-    required: false
+    required: false,
   },
   isUser: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
-
 </script>
 
 <template>
@@ -23,9 +22,17 @@ const props = defineProps({
     <lseg-avatar :isUser="props.isUser" />
     <div class="chat__text">
       {{ props.text }}
-    </div>
 
-    <slot /> <!-- ?? -->
+      <ul>
+        <li
+          v-for="(item, index) in props.options"
+          :key="index"
+          class="w-full relative"
+        >
+          {{ item.code }} | {{ item.stockExchange }} <br />
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -33,7 +40,7 @@ const props = defineProps({
 .chat__msg {
   @apply w-auto max-w-xs grid grid-cols-chat-msg-bot items-end gap-3 my-1;
 
-  &+.chat__msg:not(.chat__msg--user) {
+  & + .chat__msg:not(.chat__msg--user) {
     @apply my-0;
   }
 

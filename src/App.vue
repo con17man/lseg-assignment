@@ -5,7 +5,6 @@ import { useMainStore } from './stores/store';
 import LsegChatbot from './components/LsegChatbot.vue';
 
 const store = useMainStore();
-
 </script>
 
 <template>
@@ -19,8 +18,11 @@ const store = useMainStore();
 
   <RouterView />
 
-  <!-- Chatbot here -->
-  <lseg-chatbot @start-chat="store.fetchTopStocks" />
+  <!-- Chatbot -->
+  <lseg-chatbot
+    @start-chat="store.fetchTopStocks"
+    :stock-exchanges="store.getStockExchanges"
+  />
 </template>
 
 <style scoped lang="scss">

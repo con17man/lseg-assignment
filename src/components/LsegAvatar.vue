@@ -1,16 +1,17 @@
 <script setup>
-
 const props = defineProps({
   isUser: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 </script>
 
 <template>
   <div :class="['chat__avatar', { 'order-last': props.isUser }]">
-    <i :class="['fa-solid', props.isUser ? 'fa-user-astronaut' : 'fa-robot']"></i>
+    <i
+      :class="['fa-solid', props.isUser ? 'fa-user-astronaut' : 'fa-robot']"
+    ></i>
   </div>
 </template>
 

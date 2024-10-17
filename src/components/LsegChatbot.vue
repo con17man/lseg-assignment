@@ -1,10 +1,28 @@
 <script setup>
-import { nextTick, reactive, ref } from 'vue';
+import { nextTick, reactive, ref, toRef } from 'vue';
 import LsegButton from './LsegButton.vue';
 import LsegChatMsg from './LsegChatMsg.vue';
 
+const props = defineProps({
+  stockExchanges: {
+    type: Array,
+  },
+});
+
 const data = reactive({
   chatToggle: false,
+  messagePrompts: [
+    {
+      text: `Hello! Welcome to LSEG. I'm here to help you.`,
+      options: null,
+      isUser: false,
+    },
+    {
+      text: `Please select a stock exchange`,
+      options: toRef(() => props.stockExchanges),
+      isUser: false,
+    },
+  ],
 });
 
 const emit = defineEmits(['startChat']);
@@ -21,15 +39,19 @@ const toggleConversationView = async () => {
     emit('startChat');
   }
 
+  // scroll to the bottom of the conversation after DOM update
   await nextTick();
-  chatBoxRef.value.scrollTop = chatBoxRef.value.scrollHeight;
-
+  if (chatBoxRef.value) {
+    chatBoxRef.value.scrollTop = chatBoxRef.value.scrollHeight;
+  }
 };
-
 </script>
 
 <template>
-  <lseg-button class="btn--rounded absolute bottom-8 right-8" @click="toggleConversationView">
+  <lseg-button
+    class="btn--rounded absolute bottom-8 right-8"
+    @click="toggleConversationView"
+  >
     <i v-if="!data.chatToggle" class="fa-solid fa-robot"></i>
     <i v-else class="fa-solid fa-close"></i>
   </lseg-button>
@@ -37,14 +59,25 @@ const toggleConversationView = async () => {
   <!-- Chat window -->
   <div v-if="data.chatToggle" class="chat__wrapper">
     <div class="chat__main" ref="chatBoxRef">
-      <!-- for loop to render messages -->
-      <lseg-chat-msg text="Hi there!" :isUser="false"></lseg-chat-msg>
-      <lseg-chat-msg text="Select stock exchange:" :isUser="false"></lseg-chat-msg>
-      <lseg-chat-msg text="LSEG" :isUser="true"></lseg-chat-msg>
+      <!-- render messages -->
+      <lseg-chat-msg
+        v-for="(exchange, i) in data.messagePrompts"
+        :key="i"
+        :text="exchange.text"
+        :options="exchange.options"
+        :isUser="exchange.isUser"
+      />
     </div>
 
+    <!-- user input--disabled -->
     <div class="chat__prompt">
-      <input type="text" name="input" class="chat__input" placeholder="Type a message" disabled>
+      <input
+        type="text"
+        name="input"
+        class="chat__input"
+        placeholder="Type a message"
+        disabled
+      />
       <button class="chat__submit" disabled>
         <i class="fa-regular fa-paper-plane"></i>
       </button>

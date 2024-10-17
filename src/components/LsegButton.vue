@@ -1,12 +1,10 @@
 <script setup>
-
 defineProps({
   label: {
     type: String,
-    required: false
-  }
+    required: false,
+  },
 });
-
 </script>
 
 <template>

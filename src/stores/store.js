@@ -17,6 +17,15 @@ export const useMainStore = defineStore('store', {
     // hasDataFetched: state => {
     //   return state.topStocks.data;
     // },
+    getStockExchanges: ({ topStocks }) => {
+      if (topStocks.data) {
+        return topStocks.data.map(({ code, stockExchange }) => {
+          return { code, stockExchange };
+        });
+      }
+
+      return [];
+    },
   },
 
   actions: {
