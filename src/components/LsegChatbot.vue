@@ -18,7 +18,7 @@ const data = reactive({
       isUser: false,
     },
     {
-      text: `Please select a stock exchange`,
+      text: `Please select a stock exchange:`,
       options: toRef(() => props.stockExchanges),
       isUser: false,
     },
@@ -28,6 +28,14 @@ const data = reactive({
 const emit = defineEmits(['startChat']);
 
 const chatBoxRef = ref(null);
+
+const handleOptionChoice = ({ stockExchange, code }) => {
+  data.messagePrompts.push({
+    text: `${stockExchange}`,
+    options: null,
+    isUser: true,
+  });
+};
 
 /**
  * @description show/hide conversation chat & fetch required data
@@ -66,6 +74,7 @@ const toggleConversationView = async () => {
         :text="exchange.text"
         :options="exchange.options"
         :isUser="exchange.isUser"
+        @select-option="handleOptionChoice"
       />
     </div>
 
