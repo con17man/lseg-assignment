@@ -1,10 +1,13 @@
 <script setup>
-import { nextTick, reactive, ref, toRef } from 'vue';
+import { nextTick, reactive, ref, toRef, watch } from 'vue';
 import LsegButton from './LsegButton.vue';
 import LsegChatMsg from './LsegChatMsg.vue';
 
 const props = defineProps({
   stockExchanges: {
+    type: Array,
+  },
+  topStocks: {
     type: Array,
   },
 });
@@ -25,17 +28,49 @@ const data = reactive({
   ],
 });
 
-const emit = defineEmits(['startChat']);
+const emit = defineEmits(['startChat', 'selectExchange', 'selectStock']);
 
 const chatBoxRef = ref(null);
 
-const handleOptionChoice = ({ stockExchange, code }) => {
-  data.messagePrompts.push({
-    text: `${stockExchange}`,
-    options: null,
-    isUser: true,
-  });
+/**
+ * @description display user's selection as a message; emit event to update store
+ */
+const handleSelection = ({
+  stockExchange = '',
+  stockName = '',
+  price = '',
+  code,
+  type,
+}) => {
+  if (type === 'exchange') {
+    data.messagePrompts.push({
+      text: `${stockExchange}`,
+      options: null,
+      isUser: true,
+    });
+
+    emit('selectExchange', code);
+  } else if (type === 'stock') {
+    data.messagePrompts.push(
+      {
+        text: `${stockName}`,
+        options: null,
+        isUser: true,
+      },
+      {
+        text: `Stock price of ${stockName} is ${price}`,
+        options: null,
+        isUser: false,
+      },
+    );
+
+    emit('selectStock', code);
+  }
+
+  scrollToBottom();
 };
+
+const handleStockChoice = () => {};
 
 /**
  * @description show/hide conversation chat & fetch required data
@@ -47,12 +82,33 @@ const toggleConversationView = async () => {
     emit('startChat');
   }
 
-  // scroll to the bottom of the conversation after DOM update
+  scrollToBottom();
+};
+
+/**
+ * @description scroll to the bottom of the conversation after DOM update
+ */
+const scrollToBottom = async () => {
   await nextTick();
   if (chatBoxRef.value) {
     chatBoxRef.value.scrollTop = chatBoxRef.value.scrollHeight;
   }
 };
+
+watch(
+  () => props.topStocks,
+  (newVal, oldVal) => {
+    if (newVal.length) {
+      data.messagePrompts.push({
+        text: `Please select a stock:`,
+        options: newVal,
+        isUser: false,
+      });
+
+      scrollToBottom();
+    }
+  },
+);
 </script>
 
 <template>
@@ -74,7 +130,8 @@ const toggleConversationView = async () => {
         :text="exchange.text"
         :options="exchange.options"
         :isUser="exchange.isUser"
-        @select-option="handleOptionChoice"
+        @select-option="handleSelection"
+        @select-stock="handleStockChoice"
       />
     </div>
 
@@ -84,7 +141,7 @@ const toggleConversationView = async () => {
         type="text"
         name="input"
         class="chat__input"
-        placeholder="Type a message"
+        placeholder="Pick an option"
         disabled
       />
       <button class="chat__submit" disabled>
@@ -100,7 +157,7 @@ const toggleConversationView = async () => {
 }
 
 .chat__main {
-  @apply relative p-2 overflow-y-auto overscroll-contain;
+  @apply relative grid p-2 overflow-y-auto overscroll-contain;
 }
 
 .chat__prompt {

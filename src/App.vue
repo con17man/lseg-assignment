@@ -5,6 +5,18 @@ import { useMainStore } from './stores/store';
 import LsegChatbot from './components/LsegChatbot.vue';
 
 const store = useMainStore();
+
+const selectStockExchange = code => {
+  store.$patch({
+    selectedExchangeMarket: code,
+  });
+};
+
+const selectStock = code => {
+  store.$patch({
+    selectedStock: code,
+  });
+};
 </script>
 
 <template>
@@ -20,8 +32,11 @@ const store = useMainStore();
 
   <!-- Chatbot -->
   <lseg-chatbot
-    @start-chat="store.fetchTopStocks"
+    @start-chat="store.fetchTopExchangeMarkets"
+    @select-exchange="selectStockExchange"
+    @select-stock="selectStock"
     :stock-exchanges="store.getStockExchanges"
+    :top-stocks="store.getMarketTopStocks"
   />
 </template>
 

@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from 'vue';
 import LsegAvatar from './LsegAvatar.vue';
+import { useMainStore } from '@/stores/store';
+
+const store = useMainStore();
 
 const props = defineProps({
   text: {
@@ -18,7 +21,16 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['select-option']);
+
 const disableList = ref(false);
+
+const handleOptionSelect = item => {
+  emit('select-option', {
+    ...item,
+    type: !store.selectedExchangeMarket ? 'exchange' : 'stock',
+  });
+  disableList.value = true;
+};
 </script>
 
 <template>
@@ -34,14 +46,11 @@ const disableList = ref(false);
       <button
         v-for="(item, index) in props.options"
         :key="index"
-        @click.once="
-          emit('select-option', item);
-          disableList = true;
-        "
+        @click.once="handleOptionSelect(item)"
         :disabled="disableList ? 'disabled' : false"
         class="chat__option"
       >
-        <p class="option__name">{{ item.stockExchange }}</p>
+        <p class="option__name">{{ item.stockExchange || item.stockName }}</p>
         <p class="option__code">{{ item.code }}</p>
       </button>
     </ul>
@@ -53,7 +62,7 @@ const disableList = ref(false);
   @apply w-auto max-w-sm grid grid-cols-chat-msg-bot items-end gap-x-3 gap-y-0 mt-1;
 
   &--user {
-    @apply grid-cols-chat-msg-user float-right;
+    @apply grid-cols-chat-msg-user justify-self-end;
   }
 }
 
@@ -77,6 +86,11 @@ const disableList = ref(false);
   &:hover,
   &:focus {
     @apply border-blue text-white bg-blue;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   & .option__name {

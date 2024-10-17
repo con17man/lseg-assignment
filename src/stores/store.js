@@ -9,19 +9,33 @@ const DATA_STORE_OBJ = {
 
 export const useMainStore = defineStore('store', {
   state: () => ({
-    topStocks: { ...DATA_STORE_OBJ },
+    topExchangeMarkets: { ...DATA_STORE_OBJ },
+    selectedExchangeMarket: null,
+    selectedStock: null,
     error: null,
   }),
 
   getters: {
     // hasDataFetched: state => {
-    //   return state.topStocks.data;
+    //   return state.topExchangeMarkets.data;
     // },
-    getStockExchanges: ({ topStocks }) => {
-      if (topStocks.data) {
-        return topStocks.data.map(({ code, stockExchange }) => {
+    getStockExchanges: ({ topExchangeMarkets }) => {
+      if (topExchangeMarkets.data) {
+        return topExchangeMarkets.data.map(({ code, stockExchange }) => {
           return { code, stockExchange };
         });
+      }
+
+      return [];
+    },
+
+    getMarketTopStocks: ({ topExchangeMarkets, selectedExchangeMarket }) => {
+      if (selectedExchangeMarket) {
+        const [obj] = topExchangeMarkets.data.filter(
+          market => market.code === selectedExchangeMarket,
+        );
+
+        return obj.topStocks;
       }
 
       return [];
@@ -61,9 +75,9 @@ export const useMainStore = defineStore('store', {
       return payload;
     },
 
-    async fetchTopStocks() {
+    async fetchTopExchangeMarkets() {
       return await this.getData({
-        mutationKey: 'topStocks',
+        mutationKey: 'topExchangeMarkets',
         url: '/data/dummy_data.json',
       });
     },
