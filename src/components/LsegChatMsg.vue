@@ -24,21 +24,25 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['select-option']);
+const emit = defineEmits([
+  'select-option',
+  'select-new-exchange',
+  'select-new-stock',
+]);
 
-const disableList = ref(false);
+const disableOption = ref(false);
 
 const handleOptionSelect = item => {
   emit('select-option', {
     ...item,
     type: !store.selectedExchange ? 'exchange' : 'stock',
   });
-  disableList.value = true;
+  disableOption.value = true;
 };
 
-const resetFlow = () => {
-  store.$reset;
-};
+// const resetFlow = () => {
+//   store.$reset;
+// };
 </script>
 
 <template>
@@ -53,7 +57,7 @@ const resetFlow = () => {
         v-for="(item, index) in props.options"
         :key="index"
         @click.once="handleOptionSelect(item)"
-        :disabled="disableList ? 'disabled' : false"
+        :disabled="disableOption ? 'disabled' : false"
         class="chat__option"
       >
         <p class="option__name">{{ item.stockExchange || item.stockName }}</p>
@@ -63,9 +67,12 @@ const resetFlow = () => {
 
     <!-- TO DO -- flow variations -->
     <ul v-if="!!isEndOfFlow" class="chat__options">
-      <button class="chat__action">Select another stock</button>
-      <button class="chat__action">Select another exchange</button>
-      <button class="chat__action" @click.once="resetFlow()">Start over</button>
+      <button class="chat__action" @click.once="emit('select-new-stock')">
+        Check another stock
+      </button>
+      <button class="chat__action" @click.once="emit('select-new-exchange')">
+        Start over
+      </button>
     </ul>
   </div>
 </template>

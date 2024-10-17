@@ -15,6 +15,18 @@ const props = defineProps({
   },
 });
 
+const SELECT_EXCHANGE_PROMPT = {
+  text: `Please select a stock exchange:`,
+  options: toRef(() => props.stockExchanges),
+  isUser: false,
+};
+
+const SELECT_STOCK_PROMPT = {
+  text: `Please select a stock:`,
+  options: toRef(() => props.topStocks),
+  isUser: false,
+};
+
 const data = reactive({
   chatToggle: false,
   messagePrompts: [
@@ -23,11 +35,7 @@ const data = reactive({
       options: null,
       isUser: false,
     },
-    {
-      text: `Please select a stock exchange:`,
-      options: toRef(() => props.stockExchanges),
-      isUser: false,
-    },
+    { ...SELECT_EXCHANGE_PROMPT },
   ],
 });
 
@@ -38,18 +46,15 @@ const chatBoxRef = ref(null);
 /**
  * @description display user's selection as a message; emit event to update store
  */
-const handleSelection = ({
-  stockExchange = '',
-  stockName = '',
-  price = '',
-  code,
-  type,
-}) => {
+const handleSelection = ({ stockExchange, stockName, price, code, type }) => {
   if (type === 'exchange') {
-    data.messagePrompts.push({
-      text: `${stockExchange}`,
-      isUser: true,
-    });
+    data.messagePrompts.push(
+      {
+        text: `${stockExchange}`,
+        isUser: true,
+      },
+      { ...SELECT_STOCK_PROMPT },
+    );
 
     emit('selectExchange', code);
   } else if (type === 'stock') {
@@ -70,11 +75,19 @@ const handleSelection = ({
 
     emit('selectStock', code);
   }
-
-  scrollToBottom();
 };
 
-const handleStockChoice = () => {};
+const handleSelectNewExchange = () => {
+  data.messagePrompts.push(SELECT_EXCHANGE_PROMPT);
+  store.$patch({
+    selectedExchange: null,
+    selectedStock: null,
+  });
+};
+
+const handleSelectNewStock = () => {
+  data.messagePrompts.push(SELECT_STOCK_PROMPT);
+};
 
 /**
  * @description show/hide conversation chat & fetch required data
@@ -85,8 +98,6 @@ const toggleConversationView = async () => {
   if (data.chatToggle) {
     emit('startChat');
   }
-
-  scrollToBottom();
 };
 
 /**
@@ -99,20 +110,12 @@ const scrollToBottom = async () => {
   }
 };
 
-watch(
-  () => props.topStocks,
-  (newVal, oldVal) => {
-    if (newVal.length) {
-      data.messagePrompts.push({
-        text: `Please select a stock:`,
-        options: newVal,
-        isUser: false,
-      });
-
-      scrollToBottom();
-    }
-  },
-);
+// scroll to the bottom everytime a new prompt is added
+watch(data.messagePrompts, async prompts => {
+  if (prompts) {
+    scrollToBottom();
+  }
+});
 </script>
 
 <template>
@@ -140,7 +143,8 @@ watch(
         :isUser="exchange.isUser"
         :is-end-of-flow="exchange.isEndOfFlow"
         @select-option="handleSelection"
-        @select-stock="handleStockChoice"
+        @select-new-stock="handleSelectNewStock"
+        @select-new-exchange="handleSelectNewExchange"
       />
     </div>
 
