@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref } from 'vue';
+import { nextTick, reactive, ref } from 'vue';
 import LsegButton from './LsegButton.vue';
 import LsegChatMsg from './LsegChatMsg.vue';
 
@@ -14,14 +14,16 @@ const chatBoxRef = ref(null);
 /**
  * @description show/hide conversation chat & fetch required data
  */
-const toggleConversationView = () => {
+const toggleConversationView = async () => {
   data.chatToggle = !data.chatToggle;
 
   if (data.chatToggle) {
     emit('startChat');
   }
 
-  // chatBoxRef.value.scrollTop = chatBoxRef.value.scrollHeight;
+  await nextTick();
+  chatBoxRef.value.scrollTop = chatBoxRef.value.scrollHeight;
+
 };
 
 </script>
@@ -36,6 +38,7 @@ const toggleConversationView = () => {
   <div v-if="data.chatToggle" class="chat__wrapper">
     <div class="chat__main" ref="chatBoxRef">
       <!-- for loop to render messages -->
+      <lseg-chat-msg text="Hi there!" :isUser="false"></lseg-chat-msg>
       <lseg-chat-msg text="Select stock exchange:" :isUser="false"></lseg-chat-msg>
       <lseg-chat-msg text="LSEG" :isUser="true"></lseg-chat-msg>
     </div>

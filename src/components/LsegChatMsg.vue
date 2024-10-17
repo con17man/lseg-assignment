@@ -33,6 +33,10 @@ const props = defineProps({
 .chat__msg {
   @apply w-auto max-w-xs grid grid-cols-chat-msg-bot items-end gap-3 my-1;
 
+  &+.chat__msg:not(.chat__msg--user) {
+    @apply my-0;
+  }
+
   &--user {
     @apply grid-cols-chat-msg-user float-right;
   }
