@@ -10,7 +10,7 @@ const DATA_STORE_OBJ = {
 export const useMainStore = defineStore('store', {
   state: () => ({
     topExchangeMarkets: { ...DATA_STORE_OBJ },
-    selectedExchangeMarket: null,
+    selectedExchange: null,
     selectedStock: null,
     error: null,
   }),
@@ -29,10 +29,10 @@ export const useMainStore = defineStore('store', {
       return [];
     },
 
-    getMarketTopStocks: ({ topExchangeMarkets, selectedExchangeMarket }) => {
-      if (selectedExchangeMarket) {
+    getMarketTopStocks: ({ topExchangeMarkets, selectedExchange }) => {
+      if (selectedExchange) {
         const [obj] = topExchangeMarkets.data.filter(
-          market => market.code === selectedExchangeMarket,
+          market => market.code === selectedExchange,
         );
 
         return obj.topStocks;

@@ -18,6 +18,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  isEndOfFlow: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits(['select-option']);
@@ -27,7 +31,7 @@ const disableList = ref(false);
 const handleOptionSelect = item => {
   emit('select-option', {
     ...item,
-    type: !store.selectedExchangeMarket ? 'exchange' : 'stock',
+    type: !store.selectedExchange ? 'exchange' : 'stock',
   });
   disableList.value = true;
 };
@@ -38,9 +42,7 @@ const handleOptionSelect = item => {
     :class="['chat__msg', props.isUser ? 'chat__msg--user' : 'chat__msg--bot']"
   >
     <lseg-avatar :isUser="props.isUser" />
-    <div class="chat__text">
-      {{ props.text }}
-    </div>
+    <div class="chat__text" v-html="props.text" />
 
     <ul v-if="props.options" class="chat__options">
       <button
@@ -53,6 +55,13 @@ const handleOptionSelect = item => {
         <p class="option__name">{{ item.stockExchange || item.stockName }}</p>
         <p class="option__code">{{ item.code }}</p>
       </button>
+    </ul>
+
+    <!-- TO DO -- flow variations -->
+    <ul v-if="!!isEndOfFlow" class="chat__options">
+      <button class="chat__option">Select another stock</button>
+      <button class="chat__option">Select another exchange</button>
+      <button class="chat__option">Start over</button>
     </ul>
   </div>
 </template>
@@ -80,6 +89,7 @@ const handleOptionSelect = item => {
   grid-template-columns: 1fr 4em;
   padding: 0.25em;
   margin: 0.5em 0;
+  text-align: center;
   cursor: pointer;
   @apply border-2 border-blue-200 rounded-md;
 

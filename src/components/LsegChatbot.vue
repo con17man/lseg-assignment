@@ -2,7 +2,10 @@
 import { nextTick, reactive, ref, toRef, watch } from 'vue';
 import LsegButton from './LsegButton.vue';
 import LsegChatMsg from './LsegChatMsg.vue';
+import { useMainStore } from '@/stores/store';
+import { generateExternalLink } from '@/helpers/utils';
 
+const store = useMainStore();
 const props = defineProps({
   stockExchanges: {
     type: Array,
@@ -45,7 +48,6 @@ const handleSelection = ({
   if (type === 'exchange') {
     data.messagePrompts.push({
       text: `${stockExchange}`,
-      options: null,
       isUser: true,
     });
 
@@ -54,13 +56,15 @@ const handleSelection = ({
     data.messagePrompts.push(
       {
         text: `${stockName}`,
-        options: null,
         isUser: true,
       },
       {
-        text: `Stock price of ${stockName} is ${price}`,
+        text: `Stock price of <b>${stockName}</b> is <u>${Number(price).toFixed(2)}</u>.`,
+      },
+      {
+        text: generateExternalLink(store.selectedExchange, code),
         options: null,
-        isUser: false,
+        isEndOfFlow: true,
       },
     );
 
@@ -130,6 +134,7 @@ watch(
         :text="exchange.text"
         :options="exchange.options"
         :isUser="exchange.isUser"
+        :is-end-of-flow="exchange.isEndOfFlow"
         @select-option="handleSelection"
         @select-stock="handleStockChoice"
       />

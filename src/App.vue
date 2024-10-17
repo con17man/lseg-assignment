@@ -8,7 +8,7 @@ const store = useMainStore();
 
 const selectStockExchange = code => {
   store.$patch({
-    selectedExchangeMarket: code,
+    selectedExchange: code,
   });
 };
 
