@@ -42,7 +42,7 @@ const selectStock = code => {
 
 <style scoped lang="scss">
 .header {
-  @apply flex justify-between px-16 py-4 mx-auto text-white bg-blue;
+  @apply flex justify-between px-4 md:px-16 py-4 mx-auto text-white bg-blue;
 
   &-title {
     @apply font-bold;
